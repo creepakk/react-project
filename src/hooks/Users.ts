@@ -1,29 +1,34 @@
 import axios, { AxiosError } from 'axios'
-import { useEffect, useState } from 'react'
+import { useContext, useState } from 'react'
 import { IUser, IUserForm } from '../models/UserModel'
-
-const baseUrl = 'http://localhost:8080/api/user'
+import { ErrorContext } from '../contexts/ErrorContext'
 
 export function useUsers() {
-    const [error, setError] = useState('')
+    const baseUrl = 'http://localhost:8080/api/user'
+
+    const [loading, setLoading] = useState(false)
+    const { error, setError } = useContext(ErrorContext)
     const [users, setUsers] = useState<IUser[]>()
     const [user, setUser] = useState<IUser>()
-
 
     async function getUsers() {
         try {
             setError('')
-            await axios
-                .get<IUser[]>(baseUrl)
-                .then(res => {
-                    if (!res.data) {
-                        setError('404')
-                    } else {
-                        setUsers(res.data)
-                    }
-                })
+            setLoading(true)
+
+            const res = await axios.get<IUser[]>(baseUrl + 's')
+            const users = res.data
+
+            if (users.length === 0) {
+                setError('Users Not Found')
+            } else {
+                setUsers(users)
+            }
+
+            setLoading(false)
         } catch (e: unknown) {
             const error = e as AxiosError
+            setLoading(false)
             setError(error.message)
         }
     }
@@ -31,17 +36,21 @@ export function useUsers() {
     async function getUser(id: number) {
         try {
             setError('')
-            await axios
-                .get<IUser>(`${baseUrl}/${id}`)
-                .then(res => {
-                    if (!res.data) {
-                        setError('404')
-                    } else {
-                        setUser(res.data)
-                    }
-                })
+            setLoading(true)
+
+            const res = await axios.get<IUser>(`${baseUrl}/${id}`)
+            const user = res.data
+
+            if (!user) {
+                setError('User Not Found')
+            } else {
+                setUser(user)
+            }
+
+            setLoading(false)
         } catch (e: unknown) {
             const error = e as AxiosError
+            setLoading(false)
             setError(error.message)
         }
     }
@@ -49,11 +58,11 @@ export function useUsers() {
     async function createUser(data: IUserForm) {
         try {
             setError('')
-            await axios
-                .post(baseUrl, data)
-                .then(() => getUsers())
+            await axios.post(baseUrl, data)
+            getUsers()
         } catch (e: unknown) {
             const error = e as AxiosError
+            setLoading(false)
             setError(error.message)
         }
     }
@@ -66,9 +75,33 @@ export function useUsers() {
                 .then(() => getUser(id))
         } catch (e: unknown) {
             const error = e as AxiosError
+            setLoading(false)
             setError(error.message)
         }
     }
 
-    return { error, users, user, getUsers, getUser, createUser, updateUser }
+    async function deleteUser(id: number) {
+        try {
+            setError('')
+            await axios
+                .delete(`${baseUrl}/${id}`)
+                .then(() => getUsers())
+        } catch (e: unknown) {
+            const error = e as AxiosError
+            setLoading(false)
+            setError(error.message)
+        }
+    }
+
+    return {
+        loading,
+        error,
+        users,
+        user,
+        getUsers,
+        getUser,
+        createUser,
+        updateUser,
+        deleteUser
+    }
 }

@@ -4,39 +4,43 @@ import { UsersListLine } from "./UsersListLine"
 import { ErrorMessage } from "./ErrorMessage"
 import { UserForm } from "./UserForm"
 import { IUserForm } from "../models/UserModel"
-import { FormContext } from "../contexts/FormContext"
+import { Loader } from "./Loader"
+import { ErrorContext } from "../contexts/ErrorContext"
 
 export function UsersList() {
-    const { error, users, getUsers, createUser } = useUsers()
-    const { isVisible, closeForm, onClickHandler } = useContext(FormContext)
+    const { loading, users, getUsers, createUser } = useUsers()
+    const { error } = useContext(ErrorContext)
+    const [formSwitcher, setFormSwitcher] = useState(false)
 
     const createUserHandler = (user: IUserForm) => {
-        closeForm()
+        setFormSwitcher(false)
         createUser(user)
     }
 
     useEffect(() => {
-        closeForm()
         getUsers()
     }, [])
 
     return (
         <>
-            {error && <ErrorMessage error={error} />}
+            {/* {error && <ErrorMessage error={error} />} */}
+            {loading && <Loader />}
             {users && <>
                 <div className="users-list">
                     <div className="users-list-line ull-cols">
                         <span>Id</span><span>Name</span><span>Surname</span>
                     </div>
-                    {users.sort((a, b) => a.id - b.id)
-                        .map(user => <UsersListLine user={user} key={user.id} />)}
+
+                    {users.map(user => <UsersListLine user={user} key={user.id} />)}
                 </div>
-
-                <button className="button"
-                    onClick={onClickHandler}>Create User</button>
-
-                {isVisible && <UserForm onPost={createUserHandler} />}
             </>}
+
+            <button className="button"
+                onClick={() => setFormSwitcher(!formSwitcher)}
+            >Create User</button>
+
+            {formSwitcher && <UserForm onPost={createUserHandler} />}
+
         </>
     )
 }

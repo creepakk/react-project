@@ -1,5 +1,4 @@
 import React from 'react';
-
 import './App.scss';
 import { Route, Routes } from 'react-router';
 import { IndexPage } from './pages/IndexPage';
@@ -8,6 +7,8 @@ import { PostsPage } from './pages/PostsPage';
 import { UsersList } from './components/UsersList';
 import { User } from './components/User';
 import { Layout } from './components/Layout';
+import { PostsList } from './components/PostsList';
+import { Post } from './components/Post';
 
 function App() {
   return (
@@ -22,7 +23,10 @@ function App() {
             <Route path=':id' element={<User />} />
           </Route>
 
-          <Route path='/posts' element={<PostsPage />} />
+          <Route path='/posts' element={<PostsPage />} >
+            <Route index element={<PostsList />} />
+            <Route path=':id' element={<Post />} />
+          </Route>
 
           <Route path="*" element={<h2>404: Not Found</h2>} />
         </Route>

@@ -1,32 +1,23 @@
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { IUser, IUserForm } from "../models/UserModel"
 import { ErrorMessage } from "./ErrorMessage"
+import { ErrorContext } from "../contexts/ErrorContext"
 
 interface CreateUserFormProps {
     onPost: (user: IUserForm) => void
-    userData?: IUserForm | undefined
 }
 
-export function UserForm({ onPost, userData }: CreateUserFormProps) {
+export function UserForm({ onPost }: CreateUserFormProps) {
     const [name, setName] = useState('')
     const [surname, setSurname] = useState('')
-    const [error, setError] = useState('')
-
-
-    useEffect(() => {
-        if (userData) {
-            setName(userData?.name)
-            setSurname(userData.surname)
-        }
-    }, [])
-
+    const { error, setError } = useContext(ErrorContext)
 
     const submitHandler = async (event: React.FormEvent) => {
         event.preventDefault()
         setError('')
 
         if (name.trim() == '' || surname.trim() == '') {
-            setError('input cannot be empty')
+            setError('Input cannot be empty')
             return
         }
 
@@ -57,8 +48,6 @@ export function UserForm({ onPost, userData }: CreateUserFormProps) {
                         placeholder="Surname" value={surname}
                         onChange={surnameChangeHandler} />
                 </div>
-
-                <ErrorMessage error={error} />
 
                 <button className="button" type="submit">Submit</button>
             </form>

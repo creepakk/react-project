@@ -4,13 +4,8 @@ interface ErrorMessageProps {
 
 export function ErrorMessage({ error }: ErrorMessageProps) {
     return (
-        <>
-            {error &&
-                <div className="error-message">
-                    <p>{error}</p>
-                </div>
-            }
-        </>
-
+        <div className="error-message">
+            <p>{error}</p>
+        </div>
     )
 }
