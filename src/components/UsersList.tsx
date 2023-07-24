@@ -23,17 +23,16 @@ export function UsersList() {
 
     return (
         <>
-            {/* {error && <ErrorMessage error={error} />} */}
             {loading && <Loader />}
-            {users && <>
-                <div className="users-list">
-                    <div className="users-list-line ull-cols">
+            {users &&
+                <div className="list">
+                    <div className="list-line ll-cols">
                         <span>Id</span><span>Name</span><span>Surname</span>
                     </div>
 
                     {users.map(user => <UsersListLine user={user} key={user.id} />)}
                 </div>
-            </>}
+            }
 
             <button className="button"
                 onClick={() => setFormSwitcher(!formSwitcher)}

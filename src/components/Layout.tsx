@@ -12,13 +12,14 @@ export function Layout() {
     useEffect(() => {
         setError('')
     }, [navigate])
+
     return (
         <>
             <Navigation />
             <section>
                 <Outlet />
             </section>
-            {error && <ErrorMessage error={error} />}
+            <ErrorMessage error={error} />
         </>
     )
 }

@@ -7,7 +7,7 @@ interface PostsListLineProps {
 
 export function PostListLine({ post }: PostsListLineProps) {
     return (
-        <div className='users-list-line'>
+        <div className='list-line'>
             <span>{post.id}</span>
             <span>{post.title}</span>
             <span>{post.user_id}</span>

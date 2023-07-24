@@ -25,7 +25,7 @@ nav {
   }
 }
 
-.users-list-line {
+.list-line {
   display: flex;
   height: 30px;
 
@@ -54,23 +54,37 @@ nav {
   }
 }
 
-.ull-cols span {
+.ll-cols span {
   justify-content: center;
   background-color: rgb(185, 241, 236);
 }
 
 .error-message {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  background-color: rgb(255, 72, 72);
-  color: white;
-  padding: 5px 10px;
-
   position: fixed;
   bottom: 0;
+  left: 0;
   width: 100%;
+  div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: rgb(255, 72, 72);
+    color: white;
+    padding: 5px 10px;
+
+    position: relative;
+    width: 100%;
+
+    .error-close-btn {
+      position: absolute;
+      background-color: rgb(223, 63, 63);
+      padding: 4px 8px;
+      right: 0;
+
+      cursor: unset;
+    }
+  }
 }
 
 .button {
@@ -86,7 +100,7 @@ nav {
   border-color: rgb(136, 39, 39);
 }
 
-.user-form-block {
+.form-block {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -100,25 +114,46 @@ nav {
   }
 }
 
-.user-form {
+.form {
   display: flex;
   flex-direction: column;
+
   .form-input-line {
     display: flex;
     align-items: center;
     justify-content: end;
 
     margin: 5px;
+
     label {
       margin-right: 5px;
     }
-    input {
-      width: 150px;
+
+    input,
+    textarea {
+      width: 200px;
+      padding: 5px;
+    }
+
+    textarea {
+      font-size: 17px;
+      outline: none;
+      min-height: 81px;
+
+      resize: none;
     }
   }
 
   button {
     align-self: center;
     margin: 5px;
+  }
+}
+.post {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .post-content {
+    padding: 15px 0;
   }
 }

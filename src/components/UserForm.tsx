@@ -3,14 +3,14 @@ import { IUser, IUserForm } from "../models/UserModel"
 import { ErrorMessage } from "./ErrorMessage"
 import { ErrorContext } from "../contexts/ErrorContext"
 
-interface CreateUserFormProps {
+interface UserFormProps {
     onPost: (user: IUserForm) => void
 }
 
-export function UserForm({ onPost }: CreateUserFormProps) {
+export function UserForm({ onPost }: UserFormProps) {
     const [name, setName] = useState('')
     const [surname, setSurname] = useState('')
-    const { error, setError } = useContext(ErrorContext)
+    const { setError } = useContext(ErrorContext)
 
     const submitHandler = async (event: React.FormEvent) => {
         event.preventDefault()
@@ -32,10 +32,10 @@ export function UserForm({ onPost }: CreateUserFormProps) {
     }
 
     return (
-        <div className="user-form-block">
+        <div className="form-block">
             <h2>User Form</h2>
 
-            <form onSubmit={submitHandler} className="user-form">
+            <form onSubmit={submitHandler} className="form">
                 <div className="form-input-line">
                     <label htmlFor="name">Name </label>
                     <input type="text" name="name"

@@ -58,8 +58,12 @@ export function useUsers() {
     async function createUser(data: IUserForm) {
         try {
             setError('')
+            setLoading(true)
+
             await axios.post(baseUrl, data)
             getUsers()
+
+            setLoading(false)
         } catch (e: unknown) {
             const error = e as AxiosError
             setLoading(false)
@@ -70,9 +74,12 @@ export function useUsers() {
     async function updateUser(id: number, data: IUserForm) {
         try {
             setError('')
-            await axios
-                .put(`${baseUrl}/${id}`, data)
-                .then(() => getUser(id))
+            setLoading(true)
+
+            await axios.put(`${baseUrl}/${id}`, data)
+            getUser(id)
+
+            setLoading(false)
         } catch (e: unknown) {
             const error = e as AxiosError
             setLoading(false)
@@ -83,9 +90,7 @@ export function useUsers() {
     async function deleteUser(id: number) {
         try {
             setError('')
-            await axios
-                .delete(`${baseUrl}/${id}`)
-                .then(() => getUsers())
+            await axios.delete(`${baseUrl}/${id}`)
         } catch (e: unknown) {
             const error = e as AxiosError
             setLoading(false)

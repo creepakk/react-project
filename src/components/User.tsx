@@ -8,28 +8,36 @@ import { PostsList } from './PostsList'
 import { Loader } from './Loader'
 import { usePosts } from '../hooks/Posts'
 import { PostListLine } from './PostsListLine'
+import { PostForm } from './PostForm'
+import { IPostForm } from '../models/PostModel'
 
 
 export function User() {
     const { loading, user, getUser, updateUser, deleteUser } = useUsers()
-    const { posts, getPostsByUser } = usePosts()
+    const { createPost } = usePosts()
 
     const { id } = useParams()
-    const [formSwitcher, setFormSwitcher] = useState(false)
+    const [userFormSwitcher, setUserFormSwitcher] = useState(false)
     const [postsSwitcher, setPostsSwitcher] = useState(false)
+    const [createPostSwitcher, setCreatePostSwitcher] = useState(false)
 
     const navigate = useNavigate()
 
     const updateUserHandler = (user: IUserForm) => {
-        setFormSwitcher(false)
+        setUserFormSwitcher(false)
         updateUser(Number(id), user)
     }
+
+    const createPostHandler = (post: IPostForm) => {
+        setCreatePostSwitcher(false)
+        createPost(post)
+    }
+
     const getPostsByUserHandler = () => {
         if (postsSwitcher) {
             setPostsSwitcher(false)
         } else {
             setPostsSwitcher(true)
-            getPostsByUser(Number(id))
         }
     }
     const deleteUserHandler = () => {
@@ -48,16 +56,19 @@ export function User() {
                 <p>{user.name} {user.surname}, id: {user.id}</p>
 
                 <button className="button"
-                    onClick={() => setFormSwitcher(!formSwitcher)}>Update User</button>
+                    onClick={() => setUserFormSwitcher(!userFormSwitcher)}>Update User</button>
 
-                {formSwitcher && <UserForm onPost={updateUserHandler} />}
+                {userFormSwitcher && <UserForm onPost={updateUserHandler} />}
+
+                <button className='button' onClick={() => setCreatePostSwitcher(!createPostSwitcher)}
+                >Create Post</button>
+
+                {createPostSwitcher && <PostForm onPost={createPostHandler} />}
 
                 <button className='button' onClick={getPostsByUserHandler}
                 >Posts</button>
 
-                {postsSwitcher && <>
-                    {posts && posts.map(post => <PostListLine post={post} />)}
-                </>}
+                {postsSwitcher && <PostsList id={Number(id)} />}
 
                 <button className='button del-btn'
                     onClick={deleteUserHandler}>Delete User</button>

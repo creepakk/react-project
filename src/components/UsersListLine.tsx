@@ -7,7 +7,7 @@ interface UsersListLineProps {
 
 export function UsersListLine({ user }: UsersListLineProps) {
     return (
-        <div className='users-list-line'>
+        <div className='list-line'>
             <span>{user.id}</span>
             <span>{user.name}</span>
             <span>{user.surname}</span>
